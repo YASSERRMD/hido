@@ -1,6 +1,7 @@
-<img src="assets/hido_logo.png" width="150" alt="HIDO Logo">
-
-# HIDO - Hierarchical Intent-Driven Orchestration
+<div align="center">
+  <img src="assets/hido_logo.png" width="150" alt="HIDO Logo">
+  <h1>HIDO - Hierarchical Intent-Driven Orchestration</h1>
+</div>
 
 A decentralized agent framework providing secure identity management, semantic intent communication, and immutable audit trails.
 
