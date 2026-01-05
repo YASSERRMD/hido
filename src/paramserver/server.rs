@@ -214,6 +214,7 @@ impl Default for ParameterServer {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::core::now;
     use crate::uail::crypto::CryptoSuite;
 
     fn create_test_did() -> DIDKey {
