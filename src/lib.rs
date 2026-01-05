@@ -19,13 +19,20 @@
 //! }
 //! ```
 
+pub mod audit;
 pub mod bal;
+pub mod compliance;
 pub mod consensus;
 pub mod core;
 pub mod federated;
 pub mod gnn;
 pub mod icc;
+pub mod k8s;
+pub mod monitoring;
 pub mod paramserver;
+pub mod plugin;
+pub mod region;
+pub mod sla;
 pub mod uail;
 
 pub use core::error::{Error, Result};
