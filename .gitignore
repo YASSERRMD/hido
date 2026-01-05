@@ -1,14 +1,8 @@
-# Ignore todo folder
-todo/
+# Python Environment
+venv/
+__pycache__/
+*.pyc
 
-# Rust build artifacts
-target/
-Cargo.lock
-
-# IDE
-.idea/
-.vscode/
-*.swp
-
-# OS
-.DS_Store
+# Secrets
+.env
+python/.env

@@ -1,10 +1,30 @@
 import gradio as gr
 import hido
 import json
+import os
+import time
+
+# Try to import optional AI dependencies
+try:
+    import cohere
+    from dotenv import load_dotenv
+    load_dotenv("python/.env")
+    
+    COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+    if COHERE_API_KEY:
+        co = cohere.Client(COHERE_API_KEY)
+        ai_enabled = True
+        ai_status = "✅ AI Agent Online (Cohere)"
+    else:
+        ai_enabled = False
+        ai_status = "⚠️ No API Key found in python/.env"
+except ImportError:
+    ai_enabled = False
+    ai_status = "⚠️ Dependencies missing (cohere, python-dotenv)"
 
 # Global state
 did_manager = hido.DIDManager()
-# Initialize blockchain backend (mocked or real depending on config)
+# Initialize blockchain backend
 try:
     audit_backend = hido.AuditBackend.create_blockchain()
     backend_status = "✅ Audit Backend Connected (Blockchain)"
@@ -38,6 +58,53 @@ def create_intent(action, domain, target, priority):
     except Exception as e:
         return {"error": str(e)}
 
+def nlp_to_intents(prompt, agent_did):
+    if not ai_enabled:
+        return "AI features disabled. Check dependencies and API key."
+    
+    try:
+        # Prompt engineering for Intent Extraction
+        system_prompt = """
+        You are the HIDO Agent Core. Extract Semantic Intents from natural language.
+        Output ONLY valid JSON matching this schema:
+        {
+            "action": "string",
+            "domain": "string (Data, Compute, Communication, Coordination, or custom)",
+            "target": "string",
+            "priority": "0-3 (0=Low, 1=Normal, 2=High, 3=Critical)"
+        }
+        """
+        
+        response = co.chat(
+            message=prompt,
+            preamble=system_prompt,
+            temperature=0.3
+        )
+        
+        # Parse AI extraction
+        nlp_data = json.loads(response.text.strip('`json\n '))
+        
+        # Construct HIDO Intent using Native Rust Bindings
+        intent = hido.Intent(nlp_data["action"], nlp_data["domain"])
+        if "target" in nlp_data:
+            intent.set_target(nlp_data["target"])
+            
+        priority = int(nlp_data.get("priority", 1))
+        intent.set_priority(priority)
+        
+        # Sign intent with extracted agent DID (simulation)
+        # In a real app we'd sign signatures here using did_manager.sign()
+        
+        result_json = json.loads(intent.to_json())
+        
+        # Determine explanation
+        explanation = f"AI interpreted: '{prompt}' -> {nlp_data['action']} on {nlp_data.get('target', 'unknown')}"
+        
+        return json.dumps(result_json, indent=2), explanation
+
+    except Exception as e:
+        return f"AI Processing Failed: {str(e)}", "Error"
+
 def record_audit(actor, action, target):
     if not audit_backend:
         return "Audit backend not available."
@@ -60,10 +127,26 @@ with gr.Blocks(theme=theme, title="HIDO Dashboard") as demo:
         # 🛡️ HIDO Agent Dashboard
         **Hierarchical Intent-Driven Orchestration Control Plane**
         
-        This dashboard demonstrates the Python bindings for the HIDO Core Rust library.
+        This dashboard demonstrates the Python bindings for the HIDO Core Rust library with AI Integration.
         """
     )
     
+    with gr.Tab("🤖 AI Assistant"):
+        gr.Markdown("### Natural Language to Intent (Powered by Cohere)")
+        gr.Markdown(f"*{ai_status}*")
+        
+        with gr.Row():
+            ai_input = gr.Textbox(label="Agent Command", placeholder="e.g., Please analyze the security logs from server-1 immediately", lines=2)
+            ai_did_ref = gr.Textbox(label="Acting Agent DID", placeholder="did:hido:...")
+            
+        ai_btn = gr.Button("Process Command", variant="primary")
+        
+        with gr.Row():
+            ai_intent_output = gr.Code(language="json", label="Generated HIDO Intent")
+            ai_explanation = gr.Label(label="Reasoning")
+            
+        ai_btn.click(nlp_to_intents, inputs=[ai_input, ai_did_ref], outputs=[ai_intent_output, ai_explanation])
+
     with gr.Tab("🔐 Identity (UAIL)"):
         gr.Markdown("### Universal Agent Identity Layer")
         with gr.Row():
@@ -85,7 +168,7 @@ with gr.Blocks(theme=theme, title="HIDO Dashboard") as demo:
         resolve_btn.click(resolve_identity, inputs=[resolve_input], outputs=[doc_output])
 
     with gr.Tab("🧠 Intents (ICC)"):
-        gr.Markdown("### Intent Communication Channel")
+        gr.Markdown("### Intent Communication Channel (Manual Builder)")
         with gr.Row():
             action_in = gr.Textbox(label="Action", value="analyze_data")
             domain_in = gr.Textbox(label="Domain", value="finance")
@@ -115,6 +198,5 @@ with gr.Blocks(theme=theme, title="HIDO Dashboard") as demo:
 
 if __name__ == "__main__":
     print("Starting HIDO Dashboard...")
-    print("Ensure you have installed the package: maturin develop")
-    print("Ensure you have installed gradio: pip install gradio")
+    print(f"AI Enabled: {ai_enabled}")
     demo.launch()
