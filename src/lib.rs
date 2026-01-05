@@ -19,6 +19,7 @@
 //! }
 //! ```
 
+pub mod audit;
 pub mod bal;
 pub mod compliance;
 pub mod consensus;
