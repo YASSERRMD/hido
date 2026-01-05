@@ -20,8 +20,12 @@
 //! ```
 
 pub mod bal;
+pub mod consensus;
 pub mod core;
+pub mod federated;
+pub mod gnn;
 pub mod icc;
+pub mod paramserver;
 pub mod uail;
 
 pub use core::error::{Error, Result};
