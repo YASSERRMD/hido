@@ -37,6 +37,7 @@ A decentralized agent framework providing secure identity management, semantic i
 - **Plugins**: Hot-swappable capability system
 - **Compliance**: GDPR, SOC2, HIPAA rule engines
 - **Flexible Audit**: Pluggable backends (Blockchain, PostgreSQL, Kafka+S3, Hybrid)
+- **Python Support**: Native high-performance bindings for AI integration
 
 ## Quick Start
 
@@ -52,33 +53,30 @@ async fn main() {
 }
 ```
 
-## Python Usage (Phase 6)
+## Python SDK
 
-HIDO includes native High-Performance Python bindings.
+HIDO provides high-performance native Python bindings, allowing seamless integration with AI/ML workflows.
 
 ```bash
-# Install dependencies
-pip install maturin
-
-# Build and install local package
-maturin develop
+pip install hido
 ```
 
-**Example (`python/example.py`):**
+### Basic Usage
 
 ```python
 import hido
 
-# Generate Identity
+# 1. Generate Identity
 did_manager = hido.DIDManager()
 did = did_manager.generate()
 print(f"Agent DID: {did}")
 
-# Create Intent
+# 2. Create Intent
 intent = hido.Intent("analyze_data", "finance")
+print(f"Intent ID: {intent.get_id}")
 ```
 
-Full examples available in the [`python/`](python/) directory.
+For advanced usage including signing, verification, and audit logging, see [`python/example.py`](python/example.py).
 
 ## Installation
 

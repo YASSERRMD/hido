@@ -1,0 +1,21 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "hido"
+version = "0.1.0"
+description = "Hierarchical Intent-Driven Orchestration Agent Framework"
+authors = [{name = "HIDO Team", email = "contact@hido.dev"}]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["rust", "python", "agent", "did", "ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
