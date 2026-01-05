@@ -9,7 +9,13 @@ repository = "https://github.com/YASSERRMD/hido"
 keywords = ["agents", "decentralized", "blockchain", "identity", "ai"]
 categories = ["cryptography", "network-programming"]
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
+# Python Bindings
+pyo3 = { version = "0.20", features = ["extension-module"] }
+
 # Cryptography
 ed25519-dalek = { version = "2.1", features = ["serde"] }
 sha3 = "0.10"

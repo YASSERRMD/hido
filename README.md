@@ -52,6 +52,34 @@ async fn main() {
 }
 ```
 
+## Python Usage (Phase 6)
+
+HIDO includes native High-Performance Python bindings.
+
+```bash
+# Install dependencies
+pip install maturin
+
+# Build and install local package
+maturin develop
+```
+
+**Example (`python/example.py`):**
+
+```python
+import hido
+
+# Generate Identity
+did_manager = hido.DIDManager()
+did = did_manager.generate()
+print(f"Agent DID: {did}")
+
+# Create Intent
+intent = hido.Intent("analyze_data", "finance")
+```
+
+Full examples available in the [`python/`](python/) directory.
+
 ## Installation
 
 Add to your `Cargo.toml`:

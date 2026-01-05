@@ -33,6 +33,7 @@ pub mod paramserver;
 pub mod plugin;
 pub mod region;
 pub mod sla;
+pub mod python;
 pub mod uail;
 
 pub use core::error::{Error, Result};
