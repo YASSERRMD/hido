@@ -78,6 +78,21 @@ print(f"Intent ID: {intent.get_id}")
 
 For advanced usage including signing, verification, and audit logging, see [`python/example.py`](python/example.py).
 
+### Run Dashboard
+
+To launch the interactive Gradio dashboard:
+
+```bash
+# Set up environment
+python3 -m venv venv
+source venv/bin/activate
+pip install "urllib3<2" maturin gradio cohere python-dotenv
+
+# Build and Run
+maturin develop
+python python/app.py
+```
+
 ## Installation
 
 Add to your `Cargo.toml`:

@@ -1,11 +1,10 @@
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyBytes};
+use pyo3::types::PyBytes;
 use crate::uail::{DIDManager, DIDConfig, DIDDocument};
 use crate::uail::crypto::CryptoSuite;
 use crate::uail::DIDKey;
 use crate::icc::intent::{SemanticIntent, IntentDomain, IntentPriority};
-use crate::audit::{AuditConfig, create_audit_backend, AuditBackend, AuditEntry, EntryId};
-use crate::audit::backend::BackendType; // Import BackendType
+use crate::audit::{AuditConfig, create_audit_backend, AuditBackend, AuditEntry};
 use std::sync::Arc;
 use tokio::runtime::Runtime;
 
