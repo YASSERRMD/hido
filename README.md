@@ -1,4 +1,4 @@
-![HIDO Logo](assets/hido_logo.png)
+<img src="assets/hido_logo.png" width="150" alt="HIDO Logo">
 
 # HIDO - Hierarchical Intent-Driven Orchestration
 
