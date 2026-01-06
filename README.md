@@ -93,6 +93,18 @@ maturin develop
 python python/app.py
 ```
 
+### Docker
+
+You can run the full application stack in a container:
+
+```bash
+# Build Image
+docker build -t hido-dashboard .
+
+# Run Container (mount .env for API keys)
+docker run -p 7860:7860 -v $(pwd)/python/.env:/app/python/.env hido-dashboard
+```
+
 ## Installation
 
 Add to your `Cargo.toml`:
